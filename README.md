@@ -21,7 +21,10 @@ var request = new xhr()
 ```
 
 ## Multiple Inheritance
-Because chainify manually goes into prototypes of the children and creats replacement methods on it's own prototype and it's object you can use it to do multiple inheritance. However because this only happens once when you call the chainify method, you wont have additional methods from the chainified class get added after the fact. this may be an issue if you are altering your class prototypes at various instances so do be aware.
+Because chainify manually goes into prototypes of the children and creats replacement methods on it's own prototype and it's object you can use it to do multiple inheritance. However because this only happens once when you call the chainify method, you wont have additional methods from the source of the chainified class get new properties added to it's prototype after the fact. This may be an issue if you are altering your class prototypes at various instances so do be aware.
+
+Do also be aware that if you are in need of multiple inheritance, you are probably better off using object composition but if your code base is huge and re-working your code base is not an option then you may find the utility of multiple inheritance offered below userful 
+
 ```javascript
 class Organic{
     constructor(parentXX, parentXY){
