@@ -17,7 +17,7 @@ var chainify = function(classToWrap){
 							}
 						}
 						var result = this[sourceInstanceKey][key].apply(this[sourceInstanceKey], args)
-						return (typeof result === "undefined") ? this :result
+						return (typeof result === "undefined" || result === this[sourceInstanceKey]) ? this :result
 					}
 				}
 				return value
