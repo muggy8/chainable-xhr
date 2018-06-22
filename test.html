@@ -24,6 +24,49 @@
             new chainableMyClass("hello", "world")
                 .action()
                 .action()
+
+
+            class Organic{
+                constructor(parentXX, parentXY){
+                    this.dna = []
+                    this.parents = [parentXX, parentXY]
+                    for(var i = 0; i < parentXX.dna.length || i < parentXY.dna.length; i++){
+                        this.dna[i] = (Math.random() > 0.5) ? parentXX.dna[i] : parentXY.dna[i]
+                    }
+                }
+
+                mate(otherOrganic){
+                    return new this.constructor(this, otherOrganic)
+                }
+            }
+
+            var adam = {dna: [1,1,1,1,1,1,1,1]}
+            var eve = {dna: [0,0,0,0,0,0,0,0]}
+            var child = new Organic(eve, adam)
+
+            class Mechanical{
+                constructor(ipAddress){
+                    this.ip = ipAddress
+                }
+
+                locate(){
+                    console.log(this.ip)
+                }
+            }
+            var robo = new Mechanical("acdee")
+            robo.locate()
+
+
+            var compressedOrganic = chainify(Organic)
+            Object.setPrototypeOf(compressedOrganic.prototype, Mechanical.prototype)
+            class Cyborg extends Mechanical{
+                constructor(parentXX, parentXY, ipAddress){
+                    super(ipAddress)
+                    compressedOrganic.call(this, parentXX, parentXY)
+                }
+            }
+            Object.setPrototypeOf(Cyborg.prototype, compressedOrganic.prototype)
+            var roboCop = new Cyborg(eve, adam, "192.168.0.1")
 		</script>
 	</body>
 </html>
