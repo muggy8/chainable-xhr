@@ -1,5 +1,5 @@
 
-var chainableify = function(classToWrap){
+var chainify = function(classToWrap){
 	var sourceInstanceKey = ("0000" + ((Math.random() * Math.pow(36, 4)) | 0).toString(36)).slice(-4)
 
 	function defineReplacement(onto, key){
