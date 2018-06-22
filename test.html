@@ -42,7 +42,19 @@
 
             var adam = {dna: [1,1,1,1,1,1,1,1]}
             var eve = {dna: [0,0,0,0,0,0,0,0]}
-            var child = new Organic(eve, adam)
+
+            class Human extends Organic{
+                constructor(parentXX, parentXY, name){
+                    super(parentXX, parentXY)
+                    this.name = name
+                }
+
+                speak(){
+                    console.log("hi my name is", this.name)
+                }
+            }
+
+            var child = new Human(eve, adam, "John Smith")
 
             class Mechanical{
                 constructor(ipAddress){
@@ -53,19 +65,20 @@
                     console.log(this.ip)
                 }
             }
-            var robo = new Mechanical("acdee")
+
+            var robo = new Mechanical("192.168.0.1")
             robo.locate()
 
 
-            var compressedOrganic = chainify(Organic)
-            Object.setPrototypeOf(compressedOrganic.prototype, Mechanical.prototype)
+            var compressedHuman = chainify(Human)
+            Object.setPrototypeOf(compressedHuman.prototype, Mechanical.prototype)
             class Cyborg extends Mechanical{
                 constructor(parentXX, parentXY, ipAddress){
                     super(ipAddress)
-                    compressedOrganic.call(this, parentXX, parentXY)
+                    compressedHuman.call(this, parentXX, parentXY, "Cyborg")
                 }
             }
-            Object.setPrototypeOf(Cyborg.prototype, compressedOrganic.prototype)
+            Object.setPrototypeOf(Cyborg.prototype, compressedHuman.prototype)
             var roboCop = new Cyborg(eve, adam, "192.168.0.1")
 		</script>
 	</body>
