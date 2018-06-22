@@ -5,12 +5,25 @@
 	<body>
 		<h1>Please open your console</h1>
 		<script>
-			var xhr = chainableify(XMLHttpRequest)
+			var xhr = chainify(XMLHttpRequest)
 			new xhr()
 				.addEventListener("load", console.log)
 				.addEventListener("error", console.warn)
 				.open("GET", "//google.ca")
 				.send()
+
+            function myclass(a, b){
+                this.foo = a
+                this.bar = b
+            }
+            myclass.prototype.action = function(){
+                console.log(this.foo, this.bar)
+            }
+
+            var chainableMyClass = chainify(myclass)
+            new chainableMyClass("hello", "world")
+                .action()
+                .action()
 		</script>
 	</body>
 </html>

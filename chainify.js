@@ -29,8 +29,9 @@ var chainify = function(classToWrap){
 	}
 
 	function wrapper (){
+        var boundConstructor = Function.prototype.bind.apply(classToWrap, [null].concat(Array.prototype.slice.call(arguments)))
 		Object.defineProperty(this, sourceInstanceKey, {
-			value: new classToWrap()
+			value: new boundConstructor()
 		})
 		var keys = Object.getOwnPropertyNames(this[sourceInstanceKey])
 		for(var i = 0; i < keys.length; i++){
