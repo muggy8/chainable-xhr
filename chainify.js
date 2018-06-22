@@ -40,7 +40,7 @@ var chainify = function(classToWrap){
 	}
 	for(
 		var sourceProto = classToWrap.prototype;
-		sourceProto;
+		sourceProto && sourceProto !== Object.prototype;
 		sourceProto = Object.getPrototypeOf(sourceProto)
 		// this is the same as a while loop but it's got less characters in it and we're trying to save space so ya
 		// this loop basically iterates over the target prototype and all sub prototypes of that prototype till the end
