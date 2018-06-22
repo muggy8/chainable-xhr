@@ -1,10 +1,41 @@
 
 var chainableify = function(classToWrap){
 	var sourceInstanceKey = ("0000" + ((Math.random() * Math.pow(36, 4)) | 0).toString(36)).slice(-4)
+
+	function defineReplacement(onto, key){
+		Object.defineProperty(onto, key, {
+			// enumerable: sourceProto.propertyIsEnumerable(key),
+			// configurable: true,
+			get: function(){
+				var value = this[sourceInstanceKey][key]
+				if (typeof value === "function"){
+					return function(){
+						var args = Array.prototype.slice.call(arguments)
+						for(var i = 0; i < args.length; i++){
+							if (typeof args[i] === "function"){
+								args[i] = args[i].bind(this)
+							}
+						}
+						var result = this[sourceInstanceKey][key].apply(this[sourceInstanceKey], args)
+						return (typeof result === "undefined") ? this :result
+					}
+				}
+				return value
+			},
+			set:function(val){
+				this[sourceInstanceKey][key] = val
+			}
+		})
+	}
+
 	function wrapper (){
 		Object.defineProperty(this, sourceInstanceKey, {
 			value: new classToWrap()
 		})
+		var keys = Object.getOwnPropertyNames(this[sourceInstanceKey])
+		for(var i = 0; i < keys.length; i++){
+			defineReplacement(this, keys[i])
+		}
 	}
 	for(
 		var sourceProto = classToWrap.prototype;
@@ -20,35 +51,7 @@ var chainableify = function(classToWrap){
 				// we check it this way cuz eventually the "hasownproperty method is gonnag get replaced by a getter so it becomes unreliable"
 				continue
 			}
-			// console.log(key)
-			Object.defineProperty(wrapper.prototype, key, {
-				// enumerable: sourceProto.propertyIsEnumerable(key),
-				// configurable: true,
-				get: (function(staticKey){
-					// we do this so we can keep a reference to the original function once the key property has changed because of the next itteration of this loop
-					return function(){
-						var value = this[sourceInstanceKey][staticKey]
-						if (typeof value === "function"){
-							return function(){
-								var args = Array.prototype.slice.call(arguments)
-								for(var i = 0; i < args.length; i++){
-									if (typeof args[i] === "function"){
-										args[i] = args[i].bind(this)
-									}
-								}
-								var result = this[sourceInstanceKey][staticKey].apply(this[sourceInstanceKey], args)
-								return (typeof result === "undefined") ? this :result
-							}
-						}
-						return value
-					}
-				})(key),
-				set: (function(staticKey){
-					return function(val){
-						this[sourceInstanceKey][staticKey] = val
-					}
-				})(key)
-			})
+			defineReplacement(wrapper.prototype, key)
 		}
 	}
 
