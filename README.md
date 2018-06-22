@@ -1,9 +1,12 @@
-# chainable-xhr
+# Chainfiy
 
-This is a extremely simple class that extends the built in XMLHttpRequest object but overrides all methods that exists on the prototype so you can chain them together
+This is a extremely simple class that extender that allows you to turn objects that aren't really chainable into chainable objects.
+
+the Original intent was to build an XMLHttpRequest class that overrides all prototype methods but I then realized that it can be generalized to any class and thus this was born
 
 ## how to use
 ```javascript
+var xhr = chainify(XMLHttpRequest)
 var request = new xhr()
   .addEventListener("load", function(ev){
     console.log("hey i've loaded", ev, this) // this is the current xhr request
