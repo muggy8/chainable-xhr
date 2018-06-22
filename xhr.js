@@ -13,7 +13,7 @@ for(
 	for(var key in sourceProto){
 		if (typeof sourceProto === "function"){
 			Object.defineProperty(xhr.prototype, key, {
-				enumerable: sourceProto.propertyIsEnumerable(key)
+				enumerable: sourceProto.propertyIsEnumerable(key),
 				value: (function(protoFn){ // we do this so we can keep a reference to the original function once the key property has changed because of the next itteration of this loop
 					return function(){
 						var args = Array.prototype.slice.call(arguments)
